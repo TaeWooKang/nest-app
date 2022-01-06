@@ -1,6 +1,7 @@
 import * as request from 'supertest';
 import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { CreateCatDto } from './create-cat.dto';
 import { CatsController } from './cats.controller';
 
 describe('CatsController', () => {
@@ -24,7 +25,14 @@ describe('CatsController', () => {
 
   describe('create()', () => {
     it('This action adds a new cat', () => {
-      expect(controller.create()).toBe('This action adds a new cat');
+      const createCatData: CreateCatDto = {
+        name: 'name',
+        age: 19,
+        breed: 'bob',
+      };
+      expect(controller.create(createCatData)).toBe(
+        'This action adds a new cat',
+      );
     });
   });
 

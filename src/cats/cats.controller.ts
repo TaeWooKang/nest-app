@@ -1,10 +1,17 @@
-import { Controller, Get, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
+import { Observable, of } from 'rxjs';
+import { CreateCatDto } from './create-cat.dto';
 
 @Controller('cats')
 export class CatsController {
+  // @Post()
+  // @HttpCode(201)
+  // create(): string {
+  //   return 'This action adds a new cat';
+  // }
+
   @Post()
-  @HttpCode(201)
-  create(): string {
+  create(@Body() createCatDto: CreateCatDto) {
     return 'This action adds a new cat';
   }
 
@@ -17,5 +24,15 @@ export class CatsController {
   @Get()
   findAll(): string {
     return 'This action returns all cats';
+  }
+
+  @Get('promise')
+  async findAllPromise(): Promise<any[]> {
+    return [];
+  }
+
+  @Get('observer')
+  findAllObserver(): Observable<any[]> {
+    return of([]);
   }
 }
