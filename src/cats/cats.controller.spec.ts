@@ -6,7 +6,6 @@ describe('CatsController', () => {
   let controller: CatsController;
   const id = '1';
   const createCatData: CreateCatDto = {
-    id,
     name: 'name',
     age: 19,
     breed: 'bob',
@@ -17,6 +16,7 @@ describe('CatsController', () => {
     age: 20,
     breed: 'bob2',
   };
+  const listAllEntities: ListAllEntities = { limit: 100 };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -40,7 +40,6 @@ describe('CatsController', () => {
 
   describe('findAll()', () => {
     it('This action returns all cats', () => {
-      const listAllEntities: ListAllEntities = { limit: 100 };
       expect(controller.findAll(listAllEntities)).toBe(
         `This action returns all cats (limit: ${listAllEntities.limit} items)`,
       );
