@@ -1,12 +1,22 @@
-import * as request from 'supertest';
-import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateCatDto } from './create-cat.dto';
+import { CreateCatDto, ListAllEntities, UpdateCatDto } from './dto';
 import { CatsController } from './cats.controller';
 
 describe('CatsController', () => {
-  let app: INestApplication;
   let controller: CatsController;
+  const id = '1';
+  const createCatData: CreateCatDto = {
+    id,
+    name: 'name',
+    age: 19,
+    breed: 'bob',
+  };
+  const updateCatDto: UpdateCatDto = {
+    id,
+    name: 'name2',
+    age: 20,
+    breed: 'bob2',
+  };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -14,9 +24,6 @@ describe('CatsController', () => {
     }).compile();
 
     controller = module.get<CatsController>(CatsController);
-
-    app = module.createNestApplication();
-    await app.init();
   });
 
   it('should be defined', () => {
@@ -25,11 +32,6 @@ describe('CatsController', () => {
 
   describe('create()', () => {
     it('This action adds a new cat', () => {
-      const createCatData: CreateCatDto = {
-        name: 'name',
-        age: 19,
-        breed: 'bob',
-      };
       expect(controller.create(createCatData)).toBe(
         'This action adds a new cat',
       );
@@ -38,47 +40,30 @@ describe('CatsController', () => {
 
   describe('findAll()', () => {
     it('This action returns all cats', () => {
-      expect(controller.findAll()).toBe('This action returns all cats');
+      const listAllEntities: ListAllEntities = { limit: 100 };
+      expect(controller.findAll(listAllEntities)).toBe(
+        `This action returns all cats (limit: ${listAllEntities.limit} items)`,
+      );
     });
   });
 
-  describe('/cats (POST)', () => {
-    it('/cats (POST)', () => {
-      return request(app.getHttpServer())
-        .post('/cats')
-        .expect(201)
-        .expect('This action adds a new cat');
+  describe('findOne()', () => {
+    it('This action returns all cats', () => {
+      expect(controller.findOne(id)).toBe(`This action returns a #${id} cat`);
     });
   });
 
-  describe('/cats/void (POST)', () => {
-    it('/cats/void (POST)', () => {
-      return request(app.getHttpServer())
-        .post('/cats/void')
-        .expect(204)
-        .expect('');
+  describe('update()', () => {
+    it('This action returns all cats', () => {
+      expect(controller.update(id, updateCatDto)).toBe(
+        `This action updates a #${updateCatDto.id} cat`,
+      );
     });
   });
 
-  describe('/cats (GET)', () => {
-    it('/cats (GET)', () => {
-      return request(app.getHttpServer())
-        .get('/cats')
-        .expect(200)
-        .expect('This action returns all cats');
-    });
-  });
-
-  describe('/cats/not-found (GET)', () => {
-    it('/cats/not-found (GET)', () => {
-      return request(app.getHttpServer())
-        .get('/cats/not-found')
-        .expect(404)
-        .expect({
-          statusCode: 404,
-          message: 'Cannot GET /cats/not-found',
-          error: 'Not Found',
-        });
+  describe('remove()', () => {
+    it('This action returns all cats', () => {
+      expect(controller.remove(id)).toBe(`This action removes a #${id} cat`);
     });
   });
 });

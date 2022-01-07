@@ -1,38 +1,39 @@
-import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
-import { Observable, of } from 'rxjs';
-import { CreateCatDto } from './create-cat.dto';
+import {
+  Controller,
+  Get,
+  Query,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+} from '@nestjs/common';
+import { CreateCatDto, UpdateCatDto, ListAllEntities } from './dto';
 
 @Controller('cats')
 export class CatsController {
-  // @Post()
-  // @HttpCode(201)
-  // create(): string {
-  //   return 'This action adds a new cat';
-  // }
-
   @Post()
   create(@Body() createCatDto: CreateCatDto) {
     return 'This action adds a new cat';
   }
 
-  @Post('/void')
-  @HttpCode(204)
-  createVoid(): void {
-    // This action adds a new cat with 204
-  }
-
   @Get()
-  findAll(): string {
-    return 'This action returns all cats';
+  findAll(@Query() query: ListAllEntities) {
+    return `This action returns all cats (limit: ${query.limit} items)`;
   }
 
-  @Get('promise')
-  async findAllPromise(): Promise<any[]> {
-    return [];
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return `This action returns a #${id} cat`;
   }
 
-  @Get('observer')
-  findAllObserver(): Observable<any[]> {
-    return of([]);
+  @Put(':id')
+  update(@Param('id') id: string, @Body() updateCatDto: UpdateCatDto) {
+    return `This action updates a #${id} cat`;
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return `This action removes a #${id} cat`;
   }
 }
