@@ -8,6 +8,7 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
+import { ApiQuery } from '@nestjs/swagger';
 import { CreateCatDto, UpdateCatDto, ListAllEntities } from './dto';
 
 @Controller('cats')
@@ -18,6 +19,7 @@ export class CatsController {
   }
 
   @Get()
+  @ApiQuery({ name: 'limit', enum: [100, 200, 300] }) // swagger require value
   findAll(@Query() query: ListAllEntities) {
     return `This action returns all cats (limit: ${query.limit} items)`;
   }
