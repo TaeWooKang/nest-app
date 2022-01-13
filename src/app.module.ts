@@ -6,10 +6,10 @@ import { APP_FILTER } from '@nestjs/core';
 @Module({
   imports: [CatsModule],
   providers: [
-    {
-      provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
-    },
+    // {
+    //   provide: APP_FILTER,
+    //   useClass: HttpExceptionFilter,
+    // },
   ],
 })
 export class AppModule {}
