@@ -11,14 +11,13 @@ import {
 } from '@nestjs/common';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { CatsService } from './cats.service';
-import { ValidationPipe } from 'src/common/pipe/validation.pipe';
 
 @Controller('cats')
 export class CatsController {
   constructor(private catsService: CatsService) {}
 
   @Post()
-  async create(@Body(new ValidationPipe()) createCatDto: CreateCatDto) {
+  async create(@Body() createCatDto: CreateCatDto) {
     this.catsService.create(createCatDto);
   }
 
@@ -29,10 +28,7 @@ export class CatsController {
 
   @Get('/:id')
   async findOne(
-    @Param(
-      'id',
-      new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
-    )
+    @Param('id', ParseIntPipe)
     id: number,
   ) {
     return this.catsService.findOne(id);
