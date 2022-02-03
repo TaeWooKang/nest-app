@@ -11,25 +11,20 @@ import {
 } from '@nestjs/common';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { CatsService } from './cats.service';
+import { ValidationPipe } from 'src/common/pipe/validation.pipe';
 
 @Controller('cats')
 export class CatsController {
   constructor(private catsService: CatsService) {}
 
   @Post()
-  async create(@Body() createCatDto: CreateCatDto) {
-    throw new ForbiddenException();
+  async create(@Body(new ValidationPipe()) createCatDto: CreateCatDto) {
+    this.catsService.create(createCatDto);
   }
 
   @Get()
   async findAll() {
-    throw new HttpException(
-      {
-        status: HttpStatus.FORBIDDEN,
-        error: 'This is a custom message',
-      },
-      HttpStatus.FORBIDDEN,
-    );
+    return this.catsService.findAll();
   }
 
   @Get('/:id')
